@@ -1,35 +1,33 @@
-name: Create a pull request
+name: Pull Request CI
 
 on:
-  push:
-    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Clear npm cache
-      run: npm cache clean --force
-
-
-    - name: Install Dependencies
+    - name: Build and Test
       run: |
-        npm install -g npm@latest
-        npm install webpack webpack-cli --save-dev
+        # Install dependencies
+        npm ci
 
-    - name: Build
-      run: |
-        npx webpack
+        # Build your website here (e.g., compiling SCSS to CSS, minifying assets, etc.)
+        # Replace the build commands with your actual build steps
+        # Example commands:
+        # npm run build:css
+        # npm run build:html
+
+        # Validate HTML
+        npm run validate:html
+
+        # Lint CSS
+        npm run lint:css
+
+        # Add additional tests or checks as needed
